@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>My Sequences</h1>
+
+    <ul>
+    {% for sequence in sequences %}
+        <li>
+            {{ sequence.name }}
+            <a href="{% url 'sequence_detail' sequence.id %}">View</a>
+        </li>
+    {% empty %}
+        <li>You have not created any sequences yet.</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

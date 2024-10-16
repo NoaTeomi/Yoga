@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import YogaPose, YogaSequence
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
@@ -51,11 +51,22 @@ def user_login(request):
 def create_sequence(request):
     if request.method == 'POST':
         name = request.POST['name']
-        duration = request.POST['duration']
         pose_ids = request.POST.getlist('poses')  # List of pose IDs selected by the user
-        sequence = YogaSequence.objects.create(user=request.user, name=name, duration=duration)
+        sequence = YogaSequence.objects.create(user=request.user, name=name)
         sequence.poses.set(pose_ids)  # Associate selected poses with the sequence
         return redirect('home')
 
+    # Fetch all poses and pass to the template, including their images
     poses = YogaPose.objects.all()
     return render(request, 'create_sequence.html', {'poses': poses})
+
+
+@login_required
+def my_sequences(request):
+    sequences = YogaSequence.objects.filter(user=request.user)
+    return render(request, 'my_sequences.html', {'sequences': sequences})
+
+@login_required
+def sequence_detail(request, pk):
+    sequence = get_object_or_404(YogaSequence, pk=pk, user=request.user)
+    return render(request, 'sequence_detail.html', {'sequence': sequence})
