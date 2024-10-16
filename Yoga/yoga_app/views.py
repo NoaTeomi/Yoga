@@ -70,3 +70,9 @@ def my_sequences(request):
 def sequence_detail(request, pk):
     sequence = get_object_or_404(YogaSequence, pk=pk, user=request.user)
     return render(request, 'sequence_detail.html', {'sequence': sequence})
+
+@login_required
+def delete_sequence(request, sequence_id):
+    sequence = get_object_or_404(YogaSequence, id=sequence_id, user=request.user)
+    sequence.delete()
+    return redirect('my-sequences')
