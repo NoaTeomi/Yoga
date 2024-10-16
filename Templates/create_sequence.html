@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h2>Create a Yoga Sequence</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label for="name">Sequence Name:</label>
+    <input type="text" name="name" required><br>
+
+    <label for="duration">Duration (minutes):</label>
+    <input type="number" name="duration" required min="1"><br>
+
+    <label for="poses">Select Poses:</label><br>
+    {% for pose in poses %}
+        <input type="checkbox" name="poses" value="{{ pose.id }}"> {{ pose.name }}<br>
+    {% endfor %}
+
+    <button type="submit">Save Sequence</button>
+</form>
+{% endblock content %}
