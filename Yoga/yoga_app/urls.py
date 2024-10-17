@@ -12,5 +12,6 @@ urlpatterns = [
     path('my-sequences/', views.my_sequences, name='my-sequences'),
     path('sequence/<int:pk>/', views.sequence_detail, name='sequence_detail'),
     path('delete-sequence/<int:sequence_id>/', views.delete_sequence, name='delete_sequence'),
-    # path('sequence/edit/<int:pk>/', views.sequence_edit, name='sequence_edit'),  # Edit view
+    path('edit-sequence/<int:sequence_id>/', views.edit_sequence, name='edit_sequence'),
+    #path('sequence/edit/<int:pk>/', views.sequence_edit, name='sequence_edit'),  # Edit view
 ]

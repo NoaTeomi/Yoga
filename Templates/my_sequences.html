@@ -8,6 +8,11 @@
         <li>
             {{ sequence.name }}
             <a href="{% url 'sequence_detail' sequence.id %}">View</a>
+            <a href="{% url 'edit_sequence' sequence.id %}">Edit</a>  
+            <a href="{% url 'delete_sequence' sequence.id %}" class="btn btn-danger" 
+            onclick="return confirm('Are you sure you want to delete this sequence?');">
+            Delete
+            </a>
         </li>
     {% empty %}
         <li>You have not created any sequences yet.</li>

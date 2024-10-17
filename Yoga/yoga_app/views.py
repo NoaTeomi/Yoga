@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import YogaPose, YogaSequence
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import SignUpForm
+from .forms import SignUpForm, YogaSequenceForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -76,3 +76,19 @@ def delete_sequence(request, sequence_id):
     sequence = get_object_or_404(YogaSequence, id=sequence_id, user=request.user)
     sequence.delete()
     return redirect('my-sequences')
+
+@login_required
+def edit_sequence(request, sequence_id):
+    sequence = get_object_or_404(YogaSequence, pk=sequence_id, user=request.user)
+    
+    if request.method == 'POST':
+        form = YogaSequenceForm(request.POST, instance=sequence)
+        if form.is_valid():
+            sequence = form.save(commit=False)  # Save the sequence data but not the poses yet
+            sequence.poses.set(form.cleaned_data['poses'])  # Update the poses
+            sequence.save()  # Save the sequence with updated poses
+            return redirect('sequence_detail', pk=sequence_id)
+    else:
+        form = YogaSequenceForm(instance=sequence)
+
+    return render(request, 'edit_sequence.html', {'form': form, 'sequence': sequence})
