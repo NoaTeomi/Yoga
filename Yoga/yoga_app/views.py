@@ -4,6 +4,8 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import SignUpForm, YogaSequenceForm
 from django.contrib.auth.decorators import login_required
+import logging
+import requests
 
 
 def home(request):
@@ -92,3 +94,20 @@ def edit_sequence(request, sequence_id):
         form = YogaSequenceForm(instance=sequence)
 
     return render(request, 'edit_sequence.html', {'form': form, 'sequence': sequence})
+
+# Create a logger instance for external API calls
+logger = logging.getLogger('external_api')
+
+def fetch_api_data_view(request):
+    try:
+        logger.debug('Sending request to external API...')
+        response = requests.get('https://api.example.com/data')
+        response.raise_for_status()  # Raise an exception for HTTP error codes (4xx/5xx)
+        logger.debug(f'Successfully received data from external API: {response.status_code}')
+        data = response.json()  # Parse the JSON response
+    except requests.RequestException as e:
+        logger.error(f"Error occurred while fetching data from external API: {e}")
+        data = None  # Handle the error by setting data to None or showing an error message
+
+    # Render the data in the template, passing it to 'api_data.html'
+    return render(request, 'api_data.html', {'data': data})
