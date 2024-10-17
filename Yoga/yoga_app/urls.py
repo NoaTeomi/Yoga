@@ -8,7 +8,7 @@ urlpatterns = [
     path('signup/', signup, name='signup'),
     path('login/', user_login, name='login'),
     path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
-    path('create-sequence/', create_sequence, name='create-sequence'),
+    path('create-sequence/', create_sequence, name='create_sequence'),
     path('my-sequences/', views.my_sequences, name='my-sequences'),
     path('sequence/<int:pk>/', views.sequence_detail, name='sequence_detail'),
     path('delete-sequence/<int:sequence_id>/', views.delete_sequence, name='delete_sequence'),
