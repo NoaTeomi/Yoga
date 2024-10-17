@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ sequence.name }}</h1>
+
+    <ul>
+    {% for pose in sequence.poses.all %}
+        <li>{{ pose.name }} - <img src="{{ pose.image.url }}" alt="{{ pose.name }}" style="width: 100px;"></li>
+    {% endfor %}
+    </ul>
+
+    <a href="{% url 'my-sequences' %}">Back to My Sequences</a>
+{% endblock %}
