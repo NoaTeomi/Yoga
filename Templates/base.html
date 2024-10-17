@@ -16,7 +16,7 @@
         <nav>
             <a href="{% url 'home' %}">Home</a>
             {% if user.is_authenticated %}
-                <a href="{% url 'create-sequence' %}">Create Sequence</a>
+                <a href="{% url 'create_sequence' %}">Create Sequence</a>
                 <a href="{% url 'my-sequences' %}">My Sequences</a>
 
                 <!-- Replace logout link with a form -->
