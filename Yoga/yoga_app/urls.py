@@ -1,7 +1,12 @@
 from django.urls import path
 from . import views
 from .views import home, signup, user_login, create_sequence,delete_sequence, sequence_detail,my_sequences
+from .views import custom_logout
 from django.contrib.auth.views import LogoutView
+from django.http import HttpResponse
+
+def empty_favicon(request):
+    return HttpResponse(status=204)  # Return "No Content" response
 
 urlpatterns = [
     path('', home, name='home'),  # Use the function-based home view
@@ -13,5 +18,7 @@ urlpatterns = [
     path('sequence/<int:pk>/', views.sequence_detail, name='sequence_detail'),
     path('delete-sequence/<int:sequence_id>/', views.delete_sequence, name='delete_sequence'),
     path('edit-sequence/<int:sequence_id>/', views.edit_sequence, name='edit_sequence'),
+    path('logout/', custom_logout, name='logout'),
+    path('favicon.ico/', empty_favicon),
     #path('sequence/edit/<int:pk>/', views.sequence_edit, name='sequence_edit'),  # Edit view
 ]

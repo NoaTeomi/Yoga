@@ -1,28 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import YogaPose, YogaSequence
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import SignUpForm, YogaSequenceForm
 from django.contrib.auth.decorators import login_required
 import logging
-import requests
 
-# # Create a logger instance for external API calls
-# logger = logging.getLogger('external_api')
-
-# def fetch_api_data_view(request):
-#     try:
-#         logger.debug('Sending request to external API...')
-#         response = requests.get('https://api.example.com/data')
-#         response.raise_for_status()  # Raise an exception for HTTP error codes (4xx/5xx)
-#         logger.debug(f'Successfully received data from external API: {response.status_code}')
-#         data = response.json()  # Parse the JSON response
-#     except requests.RequestException as e:
-#         logger.error(f"Error occurred while fetching data from external API: {e}")
-#         data = None  # Handle the error by setting data to None or showing an error message
-
-#     # Render the data in the template, passing it to 'api_data.html'
-#     return render(request, 'api_data.html', {'data': data})
 
 logger = logging.getLogger('django.request')
 def home(request):
@@ -49,7 +32,10 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            logger.info(f'New user {user.username} signed up and logged in')
             return redirect('home')
+        else:
+            logger.warning('Failed signup attempt')
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
@@ -61,10 +47,29 @@ def user_login(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            logger.info(f'User {user.username} logged in successfully')
             return redirect('home')
+        else:
+            logger.warning('Failed login attempt')
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
+
+
+@login_required
+def custom_logout(request):
+    if request.user.is_authenticated:
+        logger.info(f'User {request.user.username} logged out')  # Log the username
+    logout(request)
+    return redirect('home')
+
+
+# @login_required
+# def custom_logout(request):
+#     print(f'User {request.user.username} is logging out')  # Debugging statement
+#     logger.info(f'User {request.user.username} logged out')  # Log the username
+#     logout(request)
+#     return redirect('home')
 
 
 @login_required
@@ -84,6 +89,8 @@ def create_sequence(request):
 
 @login_required
 def my_sequences(request):
+    logger = logging.getLogger('django.request')  # Get the same logger
+    logger.debug('My sequences view accessed')
     sequences = YogaSequence.objects.filter(user=request.user)
     return render(request, 'my_sequences.html', {'sequences': sequences})
 

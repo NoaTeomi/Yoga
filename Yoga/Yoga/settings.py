@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import logging
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -102,6 +103,13 @@ if not os.path.exists(LOGGING_DIR):
 
 # print("LOGGING_DIR:", LOGGING_DIR)
 
+class IgnoreFaviconFilter(logging.Filter):
+    def filter(self, record):
+        # Ignore log entries for requests to /favicon.ico
+        if '/favicon.ico' in record.getMessage():
+            return False
+        return True
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -110,30 +118,39 @@ LOGGING = {
             'format': '{asctime} {levelname} {name} {message}',
             'style': '{',
         },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
     },
     'handlers': {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(LOGGING_DIR, 'project_logs.log'),  # Path to your log file
+            'filename': os.path.join(LOGGING_DIR, 'project_logs.log'),
             'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
         },
     },
     'loggers': {
-        # 'django': {
-        #     'handlers': ['file'],
-        #     'level': 'ERROR',  # Logs errors across the Django app
-        #     'propagate': True,
-        # },
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',  # Set this to INFO or DEBUG to capture non-error logs
+            'propagate': False,  # Stop propagating to parent loggers
+        },
         'django.request': {
-            'handlers': ['file'],
-            'level': 'DEBUG',  # Logs every request
-            'propagate': True,
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,  # Avoid propagation to prevent duplicate logs
         },
         'external_api': {
-            'handlers': ['file'],
-            'level': 'DEBUG',  # Logs every external API call
-            'propagate': True,
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,  # Prevent propagation here as well
         },
     },
 }
