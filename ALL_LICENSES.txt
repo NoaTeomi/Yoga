@@ -1,0 +1,16 @@
+Django - BSD 3-Clause "New" or "Revised" License
+Coverage - MIT License
+Pillow - HPND License
+
+# add licenses of the one bellow
+asgiref==3.8.1
+certifi==2024.8.30
+charset-normalizer==3.4.0
+coverage==7.6.3
+Django==5.1.1
+idna==3.10
+pillow==10.4.0
+requests==2.32.3
+setuptools==75.2.0
+sqlparse==0.5.1
+urllib3==2.2.3
