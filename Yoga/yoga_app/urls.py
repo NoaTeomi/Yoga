@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from .views import home, signup, user_login, create_sequence,delete_sequence, sequence_detail,my_sequences
-from .views import custom_logout
+from .views import custom_logout, trigger_error, trigger_db_error
 from django.contrib.auth.views import LogoutView
 from django.http import HttpResponse
 
@@ -20,5 +20,7 @@ urlpatterns = [
     path('edit-sequence/<int:sequence_id>/', views.edit_sequence, name='edit_sequence'),
     path('logout/', custom_logout, name='logout'),
     path('favicon.ico/', empty_favicon),
+    path('trigger-error/', trigger_error, name='trigger_error'),
+    path('trigger-db-error/', trigger_db_error, name='trigger_db_error'),
     #path('sequence/edit/<int:pk>/', views.sequence_edit, name='sequence_edit'),  # Edit view
 ]

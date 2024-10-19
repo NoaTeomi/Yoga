@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import YogaPose, YogaSequence
 from django.contrib.auth import login, logout
+from django.http import HttpResponse
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import SignUpForm, YogaSequenceForm
 from django.contrib.auth.decorators import login_required
@@ -64,14 +65,6 @@ def custom_logout(request):
     return redirect('home')
 
 
-# @login_required
-# def custom_logout(request):
-#     print(f'User {request.user.username} is logging out')  # Debugging statement
-#     logger.info(f'User {request.user.username} logged out')  # Log the username
-#     logout(request)
-#     return redirect('home')
-
-
 @login_required
 def create_sequence(request):
     logger.debug('Create sequence accessed')
@@ -120,3 +113,13 @@ def edit_sequence(request, sequence_id):
         form = YogaSequenceForm(instance=sequence)
 
     return render(request, 'edit_sequence.html', {'form': form, 'sequence': sequence})
+
+def trigger_error(request):
+    # Intentional division by zero error
+    1 / 0  # This will raise ZeroDivisionError
+    return HttpResponse("This will never be reached.") 
+
+def trigger_db_error(request):
+    # Attempt to get a non-existent YogaPose (assuming ID 9999 doesn't exist)
+    pose = YogaPose.objects.get(id=9999)  # This will raise a DoesNotExist error
+    return HttpResponse(f"Pose: {pose.name}")
