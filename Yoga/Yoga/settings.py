@@ -100,6 +100,8 @@ LOGGING_DIR = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(LOGGING_DIR):
     os.makedirs(LOGGING_DIR)
 
+# print("LOGGING_DIR:", LOGGING_DIR)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -118,11 +120,11 @@ LOGGING = {
         },
     },
     'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'ERROR',  # Logs errors across the Django app
-            'propagate': True,
-        },
+        # 'django': {
+        #     'handlers': ['file'],
+        #     'level': 'ERROR',  # Logs errors across the Django app
+        #     'propagate': True,
+        # },
         'django.request': {
             'handlers': ['file'],
             'level': 'DEBUG',  # Logs every request
