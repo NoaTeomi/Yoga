@@ -13,7 +13,11 @@
             {% for pose in poses %}
                 <li>
                     <input type="checkbox" name="poses" value="{{ pose.id }}">
-                    <img src="{{ pose.image.url }}" alt="{{ pose.name }}" style="width: 100px;">
+                    {% if pose.image %}
+                        <img src="{{ pose.image.url }}" alt="{{ pose.name }}" style="width: 100px;">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
                     {{ pose.name }}
                 </li>
             {% endfor %}

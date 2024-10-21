@@ -9,6 +9,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+LOGIN_URL = '/login/'
+
 # Secret key and debug
 SECRET_KEY = 'django-insecure-de5!#(d46b45_b8s3t5*67ildz#zc$do_wv*0j6@7_86k1tn&y'
 DEBUG = True
@@ -92,3 +94,44 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGOUT_REDIRECT_URL = '/'
+
+# Define the path to your log file
+LOGGING_DIR = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOGGING_DIR):
+    os.makedirs(LOGGING_DIR)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} {levelname} {name} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOGGING_DIR, 'project_logs.log'),  # Path to your log file
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',  # Logs errors across the Django app
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'DEBUG',  # Logs every request
+            'propagate': True,
+        },
+        'external_api': {
+            'handlers': ['file'],
+            'level': 'DEBUG',  # Logs every external API call
+            'propagate': True,
+        },
+    },
+}
