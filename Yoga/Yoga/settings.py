@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import logging
+import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -97,6 +98,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
 SESSION_COOKIE_SECURE = True  # Ensures session cookies are only sent over HTTPS
 CSRF_COOKIE_SECURE = True  # Ensures CSRF cookies are only sent over HTTPS
+
+if 'test' in sys.argv:
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
 
 LOGOUT_REDIRECT_URL = '/'
 
