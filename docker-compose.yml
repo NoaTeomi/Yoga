@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  web:
+    image: noateomi/yoga-sequencing-app:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - DEBUG=True
