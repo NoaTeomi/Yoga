@@ -1,5 +1,7 @@
 from pathlib import Path
 import os
+import logging
+import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -75,7 +77,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator','OPTIONS': {'min_length': 8}
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -94,12 +96,30 @@ USE_TZ = True
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+SESSION_COOKIE_SECURE = True  # Ensures session cookies are only sent over HTTPS
+CSRF_COOKIE_SECURE = True  # Ensures CSRF cookies are only sent over HTTPS
+
+if 'test' in sys.argv:
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+
 LOGOUT_REDIRECT_URL = '/'
 
 # Define the path to your log file
 LOGGING_DIR = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(LOGGING_DIR):
     os.makedirs(LOGGING_DIR)
+
+# print("LOGGING_DIR:", LOGGING_DIR)
+
+class IgnoreFaviconFilter(logging.Filter):
+    def filter(self, record):
+        # Ignore log entries for requests to /favicon.ico
+        if '/favicon.ico' in record.getMessage():
+            return False
+        return True
 
 LOGGING = {
     'version': 1,
@@ -109,30 +129,39 @@ LOGGING = {
             'format': '{asctime} {levelname} {name} {message}',
             'style': '{',
         },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
     },
     'handlers': {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(LOGGING_DIR, 'project_logs.log'),  # Path to your log file
+            'filename': os.path.join(LOGGING_DIR, 'project_logs.log'),
             'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
-            'level': 'ERROR',  # Logs errors across the Django app
-            'propagate': True,
+            'handlers': ['file', 'console'],
+            'level': 'INFO',  # Set this to INFO or DEBUG to capture non-error logs
+            'propagate': False,  # Stop propagating to parent loggers
         },
         'django.request': {
-            'handlers': ['file'],
-            'level': 'DEBUG',  # Logs every request
-            'propagate': True,
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,  # Avoid propagation to prevent duplicate logs
         },
         'external_api': {
-            'handlers': ['file'],
-            'level': 'DEBUG',  # Logs every external API call
-            'propagate': True,
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,  # Prevent propagation here as well
         },
     },
 }

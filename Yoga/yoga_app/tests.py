@@ -1,8 +1,9 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.contrib.auth.models import User
 from .models import YogaSequence, YogaPose
 
+@override_settings(SECURE_SSL_REDIRECT=False)
 class CreateSequenceViewTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='testpass')

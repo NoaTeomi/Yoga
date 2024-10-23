@@ -1,4 +1,4 @@
-# Use an official Python runtime as a base image
+# Use the official Python image from Docker Hub
 FROM python:3.11-slim
 
 # Set the working directory in the container
@@ -21,9 +21,11 @@ RUN mkdir -p /app/media/poses
 # Collect static files
 RUN python Yoga/manage.py collectstatic --noinput
 
+
 # Expose the port the app runs on
 EXPOSE 8000
 
+feature/docker-setup
 # Run migrations
 RUN python Yoga/manage.py migrate --noinput
 
