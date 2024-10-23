@@ -15,6 +15,6 @@ class YogaSequence(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     poses = models.ManyToManyField(YogaPose, related_name='sequences')
-    
+
     def __str__(self):
         return f"{self.name} by {self.user.username}"
