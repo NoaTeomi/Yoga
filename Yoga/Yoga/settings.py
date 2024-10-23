@@ -18,7 +18,7 @@ LOGIN_URL = '/login/'
 SECRET_KEY = 'django-insecure-de5!#(d46b45_b8s3t5*67ildz#zc$do_wv*0j6@7_86k1tn&y'
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost']
 
 # Installed apps
 INSTALLED_APPS = [
@@ -96,9 +96,9 @@ USE_TZ = True
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
-SESSION_COOKIE_SECURE = True  # Ensures session cookies are only sent over HTTPS
-CSRF_COOKIE_SECURE = True  # Ensures CSRF cookies are only sent over HTTPS
+# SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+# SESSION_COOKIE_SECURE = True  # Ensures session cookies are only sent over HTTPS
+# CSRF_COOKIE_SECURE = True  # Ensures CSRF cookies are only sent over HTTPS
 
 if 'test' in sys.argv:
     SECURE_SSL_REDIRECT = False

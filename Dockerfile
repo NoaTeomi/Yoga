@@ -18,14 +18,14 @@ ENV PYTHONUNBUFFERED=1
 # Ensure media directory is created (if needed)
 RUN mkdir -p /app/media/poses
 
-# Collect static files
-RUN python Yoga/manage.py collectstatic --noinput
+# # Collect static files
+# RUN python Yoga/manage.py collectstatic --noinput
 
 
 # Expose the port the app runs on
 EXPOSE 8000
 
-feature/docker-setup
+# feature/docker-setup
 # Run migrations
 RUN python Yoga/manage.py migrate --noinput
 
