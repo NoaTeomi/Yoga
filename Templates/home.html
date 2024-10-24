@@ -4,23 +4,25 @@
 {% block content %}
     <h1>Yoga Asanas Gallery</h1>
 
-    {% if show_gallery %}
-        <div class="gallery">
-            {% for pose in poses %}
-                <div class="gallery-item">
-                    <h2>{{ pose.name }}</h2>
-                    <p>{{ pose.description }}</p>
-                    {% if pose.image %}
-                        <img src="{{ pose.image.url }}" alt="{{ pose.name }}">
-                    {% else %}
-                        <p>No image available</p>
-                    {% endif %}
-                </div>
-            {% empty %}
-                <p>No poses available at the moment.</p>
-            {% endfor %}
-        </div>
-    {% else %}
-        <p>For viewing the gallery, please sign in or sign up.</p>
+    <div class="gallery">
+        {% for pose in poses %}
+            <div class="gallery-item">
+                <h2>{{ pose.name }}</h2>
+                <p>{{ pose.description }}</p>
+                {% if pose.image %}
+                    <img src="{{ pose.image.url }}" alt="{{ pose.name }}">
+                {% else %}
+                    <p>No image available</p>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>No poses available at the moment.</p>
+        {% endfor %}
+    </div>
+
+    {% if not request.user.is_authenticated %}
+        <p>For creating a sequence, please sign in or sign up.</p>
     {% endif %}
+
 {% endblock content %}
+

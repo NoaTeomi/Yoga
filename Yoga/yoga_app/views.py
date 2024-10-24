@@ -9,20 +9,14 @@ import logging
 
 
 logger = logging.getLogger('django.request')
+
 def home(request):
     logger.debug('Home view accessed')
-    if request.user.is_authenticated:
-        # The user is logged in, show the gallery
-        context = {
-            'show_gallery': True,
-            'poses': YogaPose.objects.all()  
-        }
-    else:
-        # The user is not logged in, show the message
-        context = {
-            'show_gallery': False,
-            'poses': []  # Empty list or no data for poses when logged out
-        }
+    # Show the gallery to everyone, even if they are not logged in
+    context = {
+        'show_gallery': True,
+        'poses': YogaPose.objects.all()  # Always show poses
+    }
     
     return render(request, 'home.html', context)
 
