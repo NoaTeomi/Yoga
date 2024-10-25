@@ -2,6 +2,132 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.contrib.auth.models import User
 from .models import YogaSequence, YogaPose
+from .forms import SignUpForm
+from django.contrib.auth.forms import AuthenticationForm
+
+class SignupViewTest(TestCase):
+    
+    def test_signup_get_request(self):
+        # Test a GET request to load the signup form
+        response = self.client.get(reverse('signup'))
+        
+        # Check if the response is successful and the correct template is used
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'signup.html')
+        
+        # Verify the form is in the response context
+        self.assertIn('form', response.context)
+        self.assertIsInstance(response.context['form'], SignUpForm)
+
+    def test_successful_signup_and_redirect_to_home(self):
+        # Define the data for a new user signup
+        signup_data = {
+            'username': 'newuser',
+            'password1': 'strong_password123',
+            'password2': 'strong_password123',
+            'email': 'newuser@example.com'
+        }
+        
+        # Submit a POST request to the signup view with valid data
+        response = self.client.post(reverse('signup'), data=signup_data)
+        
+        # Check that the user is redirected to the home page after successful signup
+        self.assertRedirects(response, reverse('home'))
+        
+        # Verify the new user is created and is authenticated in the session
+        self.assertTrue(User.objects.filter(username='newuser').exists())
+        self.assertEqual(int(self.client.session['_auth_user_id']), User.objects.get(username='newuser').id)
+
+    def test_signup_with_invalid_data(self):
+        # Define invalid signup data (passwords do not match)
+        signup_data = {
+            'username': 'testuser',
+            'password1': 'password123',
+            'password2': 'different_password',
+            'email': 'testuser@example.com'
+        }
+        
+        # Submit a POST request to the signup view with invalid data
+        response = self.client.post(reverse('signup'), data=signup_data)
+        
+        # Check that the signup page is rendered again due to form errors
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'signup.html')
+        
+        # Verify that the form is in the response context before checking for form errors
+        self.assertIn('form', response.context)
+        form = response.context['form']
+        
+        # Ensure the user was not created
+        self.assertFalse(User.objects.filter(username='testuser').exists())
+        
+        # Check for form errors to confirm invalid submission
+        self.assertTrue(form.errors)
+        self.assertIn('password2', form.errors)
+        
+        # Adjusted assertion to handle typographic single quotes
+        self.assertIn("The two password fields didn't match", form.errors['password2'][0].replace("’", "'"))
+
+
+class LoginViewTest(TestCase):
+    def setUp(self):
+        # Create a test user for login tests
+        self.user = User.objects.create_user(username='testuser', password='testpass')
+
+    def test_login_get_request(self):
+        # Test a GET request to load the login form
+        response = self.client.get(reverse('login'))
+        
+        # Check if the response is successful and the correct template is used
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'login.html')
+        
+        # Verify the form is in the response context
+        self.assertIn('form', response.context)
+        self.assertIsInstance(response.context['form'], AuthenticationForm)
+
+    def test_successful_login_and_redirect_to_home(self):
+        # Define valid login data
+        login_data = {
+            'username': 'testuser',
+            'password': 'testpass'
+        }
+        
+        # Submit a POST request to the login view with valid data
+        response = self.client.post(reverse('login'), data=login_data)
+        
+        # Check that the user is redirected to the home page after successful login
+        self.assertRedirects(response, reverse('home'))
+        
+        # Verify the user is logged in by checking the session
+        self.assertEqual(int(self.client.session['_auth_user_id']), self.user.id)
+
+    def test_login_with_invalid_data(self):
+        # Define invalid login data (incorrect password)
+        login_data = {
+            'username': 'testuser',
+            'password': 'wrongpass'
+        }
+        
+        # Submit a POST request to the login view with invalid data
+        response = self.client.post(reverse('login'), data=login_data)
+        
+        # Check that the login page is rendered again due to form errors
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'login.html')
+        
+        # Verify that the form is in the response context before checking for form errors
+        self.assertIn('form', response.context)
+        form = response.context['form']
+        
+        # Ensure the user was not logged in
+        self.assertNotIn('_auth_user_id', self.client.session)
+        
+        # Check for form errors to confirm invalid submission
+        self.assertTrue(form.errors)
+        self.assertIn('__all__', form.errors)
+        self.assertIn("Please enter a correct username and password", form.errors['__all__'][0])
+
 
 @override_settings(SECURE_SSL_REDIRECT=False)
 class CreateSequenceViewTest(TestCase):
