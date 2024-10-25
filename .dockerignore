@@ -4,6 +4,4 @@ __pycache__
 *.pyd
 env
 *.sqlite3
-/static
-/media
 .git

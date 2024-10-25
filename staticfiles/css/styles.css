@@ -1,0 +1,72 @@
+/* static/css/styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: #333;/* Dark text for visibility */
+    text-align: center;
+    margin: 20px 0;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    z-index: 10;  /* Ensures the header stays on top */
+    padding: 15px;
+    position: relative;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+main {
+   padding-bottom: 60px;  /* Adjust according to footer height */
+   min-height: 100vh;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.gallery-item {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+

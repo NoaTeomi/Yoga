@@ -18,7 +18,8 @@ LOGIN_URL = '/login/'
 SECRET_KEY = 'django-insecure-de5!#(d46b45_b8s3t5*67ildz#zc$do_wv*0j6@7_86k1tn&y'
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost','web']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
 
 # Installed apps
 INSTALLED_APPS = [
@@ -34,6 +35,7 @@ INSTALLED_APPS = [
 # Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -41,6 +43,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'Yoga.urls'
 
@@ -64,6 +68,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Yoga.wsgi.application'
 
 # Database configuration
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'yogadb',
+#         'USER': 'postgres',
+#         'PASSWORD': 'password',
+#         'HOST': 'db',  # This refers to the service name in docker-compose.yml
+#         'PORT': '5432',
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
