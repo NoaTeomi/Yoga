@@ -12,7 +12,7 @@ services:
     # depends_on:
     #   - db
     env_file:
-      - ./Yoga/.env 
+      - .env 
     networks:
       - app-network
 

@@ -38,9 +38,9 @@ jobs:
     # Updated Step: Create .env file in the Yoga directory
     - name: Create .env file
       run: |
-        echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> Yoga/.env
+        echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
       working-directory: Yoga
-      
+
     - name: Set up Docker Compose
       run: |
         docker-compose -f docker-compose.yml up -d
