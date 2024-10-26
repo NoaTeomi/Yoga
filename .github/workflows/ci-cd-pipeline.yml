@@ -40,6 +40,14 @@ jobs:
       run: |
         docker-compose -f docker-compose.yml up -d
 
+    # Debug Step: List running containers
+    - name: List Running Containers
+      run: docker ps -a
+
+    # Debug Step: Show Docker Compose logs
+    - name: Show Docker Compose Logs
+      run: docker-compose -f docker-compose.yml logs
+
     - name: Install Dependencies
       run: |
         docker exec -it yoga_web python -m pip install --upgrade pip
