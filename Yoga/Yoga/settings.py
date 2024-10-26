@@ -103,7 +103,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Localization settings
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jerusalem'
 USE_I18N = True
 USE_TZ = True
 
