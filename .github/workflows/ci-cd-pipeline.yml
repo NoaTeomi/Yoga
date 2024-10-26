@@ -60,11 +60,11 @@ jobs:
 
     - name: Apply Migrations
       run: |
-        docker exec yoga_web_1 python manage.py migrate
+        docker exec yoga_web_1 python /app/Yoga/manage.py migrate
 
     - name: Run Tests
       run: |
-        docker exec yoga_web_1 python manage.py test
+        docker exec yoga_web_1 python /app/Yoga/manage.py test
 
     # Additional Deployment Steps
     - name: Build and Push Docker Image
