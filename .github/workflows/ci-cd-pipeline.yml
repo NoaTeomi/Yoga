@@ -34,6 +34,12 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y docker-compose  
+
+    # Updated Step: Create .env file (Removed DEBUG=True)
+    - name: Create .env file
+      run: |
+        echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
+      working-directory: Yoga
       
     - name: Set up Docker Compose
       run: |
