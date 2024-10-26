@@ -1,25 +1,58 @@
-name: CI/CD Pipeline
+name: Django CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - feature/ci-cd-pipeline
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.9'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-      - name: Run Tests
-        run: python manage.py test
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: Set up Docker Compose
+      run: |
+        docker-compose -f docker-compose.yml up -d
+
+    - name: Install Dependencies
+      run: |
+        docker exec -it yoga_web python -m pip install --upgrade pip
+        docker exec -it yoga_web pip install -r requirements.txt
+
+    - name: Apply Migrations
+      run: |
+        docker exec -it yoga_web python manage.py migrate
+
+    - name: Run Tests
+      run: |
+        docker exec -it yoga_web python manage.py test
+
+    # Additional Deployment Steps
+    - name: Build and Push Docker Image
+      run: |
+        docker build -t noateomi/yoga_app:${{ github.sha }} .
+        echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        docker push noateomi/yoga_app:${{ github.sha }}
+
+    - name: Deploy to Production
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+      run: |
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no user@your-server-ip << EOF
+          docker pull noateomi/yoga_app:${{ github.sha }}
+          docker stop yoga_app || true && docker rm yoga_app || true
+          docker run -d --name yoga_app -p 80:8000 noateomi/yoga_app:${{ github.sha }}
+        EOF
