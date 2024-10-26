@@ -44,9 +44,9 @@ jobs:
     - name: Wait for Containers to Initialize
       run: sleep 10
 
-    # Show logs for yoga_web specifically
-    - name: Show Logs for yoga_web
-      run: docker-compose -f docker-compose.yml logs yoga_web
+    # Show logs for web specifically
+    - name: Show Logs for web
+      run: docker-compose -f docker-compose.yml logs web
 
     # Check container health
     - name: List Running Containers and Check Health
@@ -54,16 +54,16 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        docker exec -it yoga_web python -m pip install --upgrade pip
-        docker exec -it yoga_web pip install -r Yoga/Yoga/requirements.txt
+        docker exec -it web python -m pip install --upgrade pip
+        docker exec -it web pip install -r Yoga/Yoga/requirements.txt
 
     - name: Apply Migrations
       run: |
-        docker exec -it yoga_web python manage.py migrate
+        docker exec -it web python manage.py migrate
 
     - name: Run Tests
       run: |
-        docker exec -it yoga_web python manage.py test
+        docker exec -it web python manage.py test
 
     # Additional Deployment Steps
     - name: Build and Push Docker Image
