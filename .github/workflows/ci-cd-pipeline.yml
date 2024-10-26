@@ -52,11 +52,11 @@ jobs:
     - name: List All Containers
       run: docker ps -a
 
-    # Install Dependencies in the web container
+    # Install Dependencies in the web container with corrected path
     - name: Install Dependencies
       run: |
         docker exec yoga_web_1 python -m pip install --upgrade pip
-        docker exec yoga_web_1 pip install -r Yoga/Yoga/requirements.txt
+        docker exec yoga_web_1 pip install -r /app/Yoga/requirements.txt
 
     - name: Apply Migrations
       run: |
