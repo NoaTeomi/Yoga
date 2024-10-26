@@ -66,42 +66,119 @@ jobs:
       run: |
         docker exec yoga_web_1 python /app/Yoga/manage.py test
 
-    # Additional Deployment Steps
+    # Build and Push Docker Image to Docker Hub
     - name: Build and Push Docker Image
       run: |
         docker build -t noateomi/yoga_app:${{ github.sha }} .
         echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
         docker push noateomi/yoga_app:${{ github.sha }}
+
+
+
+# name: Django CI/CD Pipeline
+
+# on:
+#   push:
+#     branches: 
+#       - feature/ci-cd-pipeline
+#   pull_request:
+#     branches: 
+#       - main
+
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
+
+#     strategy:
+#       matrix:
+#         python-version: [3.7, 3.8, 3.9]
+
+#     steps:
+#     - uses: actions/checkout@v4
+
+#     - name: Set up Python ${{ matrix.python-version }}
+#       uses: actions/setup-python@v3
+#       with:
+#         python-version: ${{ matrix.python-version }}
+
+#     # Install Docker Compose
+#     - name: Install Docker Compose
+#       run: |
+#         sudo apt-get update
+#         sudo apt-get install -y docker-compose  
+
+#     # Create .env file in the root directory
+#     - name: Create .env file in root directory
+#       run: |
+#         echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
+
+#     # Run Docker Compose from the root directory
+#     - name: Set up Docker Compose
+#       run: |
+#         docker-compose -f docker-compose.yml up -d
+
+#     # Wait for Containers to Initialize
+#     - name: Wait for Containers to Initialize
+#       run: sleep 10
+
+#     # Show logs for all services to check for errors
+#     - name: Show Docker Compose Logs
+#       run: docker-compose -f docker-compose.yml logs
+
+#     # List all containers to verify web service status
+#     - name: List All Containers
+#       run: docker ps -a
+
+#     # Install Dependencies in the web container with corrected path
+#     - name: Install Dependencies
+#       run: |
+#         docker exec yoga_web_1 python -m pip install --upgrade pip
+#         docker exec yoga_web_1 pip install -r /app/Yoga/requirements.txt
+
+#     - name: Apply Migrations
+#       run: |
+#         docker exec yoga_web_1 python /app/Yoga/manage.py migrate
+
+#     - name: Run Tests
+#       run: |
+#         docker exec yoga_web_1 python /app/Yoga/manage.py test
+
+#     # Additional Deployment Steps
+#     - name: Build and Push Docker Image
+#       run: |
+#         docker build -t noateomi/yoga_app:${{ github.sha }} .
+#         echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+#         docker push noateomi/yoga_app:${{ github.sha }}
     
-    # Add SSH key to the runner environment
-    - name: Add SSH private key
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa     
+#     # Add SSH key to the runner environment
+#     - name: Add SSH private key
+#       run: |
+#         mkdir -p ~/.ssh
+#         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+#         chmod 600 ~/.ssh/id_rsa     
 
   
-    - name: Deploy to Production
-      env:
-        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no user@${{ secrets.SERVER_IP }} << EOF
-            docker pull noateomi/yoga_app:${{ github.sha }}
-            docker stop yoga_app || true && docker rm yoga_app || true
-            docker run -d --name yoga_app -p 80:8000 noateomi/yoga_app:${{ github.sha }}
-        EOF
+#     - name: Deploy to Production
+#       env:
+#         DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+#         DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+#       run: |
+#         mkdir -p ~/.ssh
+#         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+#         chmod 600 ~/.ssh/id_rsa
+#         ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no user@${{ secrets.SERVER_IP }} << EOF
+#             docker pull noateomi/yoga_app:${{ github.sha }}
+#             docker stop yoga_app || true && docker rm yoga_app || true
+#             docker run -d --name yoga_app -p 80:8000 noateomi/yoga_app:${{ github.sha }}
+#         EOF
       
-    # - name: Deploy to Production
-    #   env:
-    #     DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-    #     DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-    #   run: |
-    #     ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no user@your-server-ip << EOF
-    #       docker pull noateomi/yoga_app:${{ github.sha }}
-    #       docker stop yoga_app || true && docker rm yoga_app || true
-    #       docker run -d --name yoga_app -p 80:8000 noateomi/yoga_app:${{ github.sha }}
-    #     EOF
+#     # - name: Deploy to Production
+#     #   env:
+#     #     DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+#     #     DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+#     #   run: |
+#     #     ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no user@your-server-ip << EOF
+#     #       docker pull noateomi/yoga_app:${{ github.sha }}
+#     #       docker stop yoga_app || true && docker rm yoga_app || true
+#     #       docker run -d --name yoga_app -p 80:8000 noateomi/yoga_app:${{ github.sha }}
+#     #     EOF
