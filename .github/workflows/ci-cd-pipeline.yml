@@ -30,6 +30,10 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y docker-compose  
 
+    # Debug Step: List files in the repository root
+    - name: List files in repository root
+      run: ls -R
+
     # Confirm location of docker-compose.yml
     - name: Verify docker-compose.yml exists in Yoga directory
       run: |
