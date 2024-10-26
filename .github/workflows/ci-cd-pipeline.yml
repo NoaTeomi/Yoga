@@ -40,13 +40,17 @@ jobs:
       run: |
         docker-compose -f docker-compose.yml up -d
 
-    # Debug Step: List running containers
-    - name: List Running Containers
-      run: docker ps -a
+    # Add a short delay to allow containers to initialize
+    - name: Wait for Containers to Initialize
+      run: sleep 10
 
-    # Debug Step: Show Docker Compose logs
-    - name: Show Docker Compose Logs
-      run: docker-compose -f docker-compose.yml logs
+    # Show logs for yoga_web specifically
+    - name: Show Logs for yoga_web
+      run: docker-compose -f docker-compose.yml logs yoga_web
+
+    # Check container health
+    - name: List Running Containers and Check Health
+      run: docker ps -a
 
     - name: Install Dependencies
       run: |
