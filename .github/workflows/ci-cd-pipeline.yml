@@ -80,13 +80,28 @@ jobs:
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa     
 
+  
     - name: Deploy to Production
       env:
         DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
       run: |
-        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no user@your-server-ip << EOF
-          docker pull noateomi/yoga_app:${{ github.sha }}
-          docker stop yoga_app || true && docker rm yoga_app || true
-          docker run -d --name yoga_app -p 80:8000 noateomi/yoga_app:${{ github.sha }}
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no user@${{ secrets.SERVER_IP }} << EOF
+            docker pull noateomi/yoga_app:${{ github.sha }}
+            docker stop yoga_app || true && docker rm yoga_app || true
+            docker run -d --name yoga_app -p 80:8000 noateomi/yoga_app:${{ github.sha }}
         EOF
+      
+    # - name: Deploy to Production
+    #   env:
+    #     DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+    #     DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+    #   run: |
+    #     ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no user@your-server-ip << EOF
+    #       docker pull noateomi/yoga_app:${{ github.sha }}
+    #       docker stop yoga_app || true && docker rm yoga_app || true
+    #       docker run -d --name yoga_app -p 80:8000 noateomi/yoga_app:${{ github.sha }}
+    #     EOF
