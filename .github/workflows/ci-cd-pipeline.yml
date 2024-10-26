@@ -40,17 +40,22 @@ jobs:
       run: |
         docker-compose -f docker-compose.yml up -d
 
-    # Add a short delay to allow containers to initialize
+    # Wait for Containers to Initialize
     - name: Wait for Containers to Initialize
       run: sleep 10
 
-    # Show logs for web specifically
-    - name: Show Logs for web
-      run: docker-compose -f docker-compose.yml logs web
+    # Show logs for all services to check for errors
+    - name: Show Docker Compose Logs
+      run: docker-compose -f docker-compose.yml logs
 
-    # Check container health
-    - name: List Running Containers and Check Health
+    # List all containers to verify web service status
+    - name: List All Containers
       run: docker ps -a
+
+    # Inspect web container details if it's created
+    - name: Inspect web Container
+      if: success() && contains(steps.List_All_Containers.outputs.containers, 'web')
+      run: docker inspect web
 
     - name: Install Dependencies
       run: |
