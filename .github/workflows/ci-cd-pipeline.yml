@@ -30,27 +30,15 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y docker-compose  
 
-    # Debug Step: List files in the repository root
-    - name: List files in repository root
-      run: ls -R
-
-    # Confirm location of docker-compose.yml
-    - name: Verify docker-compose.yml exists in Yoga directory
-      run: |
-        if [ ! -f docker-compose.yml ]; then echo "docker-compose.yml not found in Yoga directory"; exit 1; fi
-      working-directory: Yoga
-
-    # Create .env file in the Yoga directory
+    # Create .env file in Yoga directory
     - name: Create .env file
       run: |
-        echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
-      working-directory: Yoga
+        echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> Yoga/.env
 
-    # Run Docker Compose from Yoga directory
+    # Run Docker Compose from the root directory
     - name: Set up Docker Compose
       run: |
         docker-compose -f docker-compose.yml up -d
-      working-directory: Yoga
 
     - name: Install Dependencies
       run: |
