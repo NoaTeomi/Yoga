@@ -72,6 +72,13 @@ jobs:
         docker build -t noateomi/yoga_app:${{ github.sha }} .
         echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
         docker push noateomi/yoga_app:${{ github.sha }}
+    
+    # Add SSH key to the runner environment
+    - name: Add SSH private key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa     
 
     - name: Deploy to Production
       env:
