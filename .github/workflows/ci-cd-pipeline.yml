@@ -55,16 +55,16 @@ jobs:
     # Install Dependencies in the web container
     - name: Install Dependencies
       run: |
-        docker exec -it yoga_web_1 python -m pip install --upgrade pip
-        docker exec -it yoga_web_1 pip install -r Yoga/Yoga/requirements.txt
+        docker exec yoga_web_1 python -m pip install --upgrade pip
+        docker exec yoga_web_1 pip install -r Yoga/Yoga/requirements.txt
 
     - name: Apply Migrations
       run: |
-        docker exec -it yoga_web_1 python manage.py migrate
+        docker exec yoga_web_1 python manage.py migrate
 
     - name: Run Tests
       run: |
-        docker exec -it yoga_web_1 python manage.py test
+        docker exec yoga_web_1 python manage.py test
 
     # Additional Deployment Steps
     - name: Build and Push Docker Image
