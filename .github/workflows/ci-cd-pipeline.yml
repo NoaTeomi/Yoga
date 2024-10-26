@@ -7,11 +7,6 @@ on:
   pull_request:
     branches: 
       - main
-# on:
-#   push:
-#     branches: [ "main" ]
-#   pull_request:
-#     branches: [ "main" ]
 
 jobs:
   build-and-deploy:
@@ -29,13 +24,13 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    # Added Step: Install Docker Compose
+    # Install Docker Compose
     - name: Install Docker Compose
       run: |
         sudo apt-get update
         sudo apt-get install -y docker-compose  
 
-    # Updated Step: Create .env file in the Yoga directory
+    # Create .env file in Yoga directory
     - name: Create .env file
       run: |
         echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
@@ -44,6 +39,7 @@ jobs:
     - name: Set up Docker Compose
       run: |
         docker-compose -f docker-compose.yml up -d
+      working-directory: Yoga
 
     - name: Install Dependencies
       run: |
