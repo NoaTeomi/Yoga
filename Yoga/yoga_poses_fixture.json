@@ -1,0 +1,83 @@
+[
+{
+    "model": "yoga_app.yogapose",
+    "pk": 2,
+    "fields": {
+        "name": "Virabhadrasana III",
+        "description": "Warrior III",
+        "image": "poses/VIRABADRASANA3.png"
+    }
+},
+{
+    "model": "yoga_app.yogapose",
+    "pk": 4,
+    "fields": {
+        "name": "Virabhadrasana II",
+        "description": "Warrior II",
+        "image": "poses/VIRABADARASANA2.png"
+    }
+},
+{
+    "model": "yoga_app.yogapose",
+    "pk": 5,
+    "fields": {
+        "name": "Uttanasana",
+        "description": "Standing Forward Fold",
+        "image": "poses/UTANASANA.png"
+    }
+},
+{
+    "model": "yoga_app.yogapose",
+    "pk": 6,
+    "fields": {
+        "name": "Dhanurasana",
+        "description": "Bow Pose",
+        "image": "poses/URDHAVA_DHANURASANA.png"
+    }
+},
+{
+    "model": "yoga_app.yogapose",
+    "pk": 11,
+    "fields": {
+        "name": "Virabhadrasana I",
+        "description": "Warrior 1",
+        "image": "poses/VIRABADRASANA1_nunH3Eh.png"
+    }
+},
+{
+    "model": "yoga_app.yogapose",
+    "pk": 12,
+    "fields": {
+        "name": "Pincha",
+        "description": "Forearm Stand",
+        "image": "poses/PINCHA_CuHB6sJ.png"
+    }
+},
+{
+    "model": "yoga_app.yogapose",
+    "pk": 13,
+    "fields": {
+        "name": "Navasana",
+        "description": "Boat Pose",
+        "image": "poses/NAVASANA_p5akQlM.png"
+    }
+},
+{
+    "model": "yoga_app.yogapose",
+    "pk": 14,
+    "fields": {
+        "name": "Purvottanasana",
+        "description": "Reverse Plank",
+        "image": "poses/PURVOTTANASANA_xKrYDOS.png"
+    }
+},
+{
+    "model": "yoga_app.yogapose",
+    "pk": 15,
+    "fields": {
+        "name": "Setu Bandha",
+        "description": "Bridge Pose",
+        "image": "poses/SETU_BANDHA_uqt9i0m.png"
+    }
+}
+]
