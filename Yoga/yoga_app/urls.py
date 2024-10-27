@@ -1,9 +1,11 @@
 from django.urls import path
 from . import views
-from .views import home, signup, user_login, create_sequence,delete_sequence, sequence_detail,my_sequences
+from .views import home, signup, user_login, create_sequence, delete_sequence, sequence_detail, my_sequences
 from .views import custom_logout, trigger_error, trigger_db_error
 from django.contrib.auth.views import LogoutView
 from django.http import HttpResponse
+from django.conf import settings
+from django.conf.urls.static import static
 
 def empty_favicon(request):
     return HttpResponse(status=204)  # Return "No Content" response
@@ -23,4 +25,4 @@ urlpatterns = [
     path('trigger-error/', trigger_error, name='trigger_error'),
     path('trigger-db-error/', trigger_db_error, name='trigger_db_error'),
     #path('sequence/edit/<int:pk>/', views.sequence_edit, name='sequence_edit'),  # Edit view
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
