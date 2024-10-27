@@ -19,3 +19,23 @@ Features
 4. My Sequences
   * Registered users can view, edit, or delete their saved sequences.
   * A simple interface for managing personal yoga sequences with just a few clicks.
+
+# How to Run
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/noateomi/Yoga.git
+    cd Yoga
+    ```
+
+2. Start the Docker containers:
+
+    ```bash
+    docker compose up -d
+    ```
+
+The application will be accessible at:
+- **Web**: [http://localhost:8000](http://localhost:8000)
+- **Nginx**: [http://localhost:8080](http://localhost:8080)
+
