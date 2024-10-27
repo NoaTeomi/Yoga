@@ -2,8 +2,10 @@ services:
   web:
     build:
       context: .
+    image: noateomi/yoga_web:1.0.0
     command: >
       sh -c "python Yoga/manage.py migrate &&
+             python Yoga/manage.py collectstatic --noinput &&
              python Yoga/manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
@@ -19,9 +21,9 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./media:/app/media  # Relative path for compatibility
+      - ./media:/app/media  # Serve media files
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./staticfiles:/app/static  # Relative path for compatibility
+      - ./staticfiles:/app/static  # Serve static files
     depends_on:
       - web
     networks:
