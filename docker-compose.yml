@@ -1,5 +1,3 @@
-# version: '3.8'
-
 services:
   web:
     build:
@@ -7,8 +5,8 @@ services:
     command: python Yoga/manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
-    ports:  # Use "ports" to bind the port to the host
-      - "8000:8000"  # Bind container's port 8000 to host's port 8000
+    ports:
+      - "8000:8000"
     env_file:
       - .env
     networks:
@@ -19,9 +17,9 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - /home/noat/Documents/Final_Project/Yoga/media:/app/media
+      - ./media:/app/media  # Relative path for compatibility
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - /home/noat/Documents/Final_Project/Yoga/staticfiles:/app/static  # Map the correct static files directory
+      - ./staticfiles:/app/static  # Relative path for compatibility
     depends_on:
       - web
     networks:
@@ -29,3 +27,34 @@ services:
 
 networks:
   app-network:
+
+
+# services:
+#   web:
+#     build:
+#       context: .
+#     command: python Yoga/manage.py runserver 0.0.0.0:8000
+#     volumes:
+#       - .:/app
+#     ports:  # Use "ports" to bind the port to the host
+#       - "8000:8000"  # Bind container's port 8000 to host's port 8000
+#     env_file:
+#       - .env
+#     networks:
+#       - app-network
+
+#   nginx:
+#     image: nginx:latest
+#     ports:
+#       - "8080:80"
+#     volumes:
+#       - /home/noat/Documents/Final_Project/Yoga/media:/app/media
+#       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+#       - /home/noat/Documents/Final_Project/Yoga/staticfiles:/app/static  # Map the correct static files directory
+#     depends_on:
+#       - web
+#     networks:
+#       - app-network
+
+# networks:
+#   app-network:
