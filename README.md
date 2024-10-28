@@ -75,7 +75,17 @@ Once everything is set up, access the application by opening a browser and going
 - The application will be accessible on port 8080, with Nginx as the reverse proxy.
 - The web service serves the Django application, and nginx serves static files.
 
-**5. Stopping the Application**
+**5. Running Tests** 
+
+To run the tests with coverage:
+
+     docker-compose exec web coverage run --source='.' Yoga/manage.py test yoga_app
+
+**6. Generate a coverage report**
+
+     docker-compose exec web coverage report
+
+**7. Stopping the Application**
 
 To stop the running containers, use:
 
