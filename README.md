@@ -20,22 +20,64 @@ Features
   * Registered users can view, edit, or delete their saved sequences.
   * A simple interface for managing personal yoga sequences with just a few clicks.
 
-# How to Run
+# Project Setup
 
-1. Clone the repository:
+Follow these steps to successfully run the Yoga project from the Git repository.
 
-    ```bash
-    git clone https://github.com/noateomi/Yoga.git
-    cd Yoga
-    ```
+**Prerequisites:**
 
-2. Start the Docker containers:
+**1. Install Docker and Docker Compose**
 
-    ```bash
-    docker compose up -d
-    ```
+Docker and Docker Compose are required to run this project. Follow the official installation instructions based on your operating system:
 
-The application will be accessible at:
-- **Web**: [http://localhost:8000](http://localhost:8000)
-- **Nginx**: [http://localhost:8080](http://localhost:8080)
+- Docker: Install Docker
+- Docker Compose: Install Docker Compose (if not included with Docker)
 
+  Note: After installing Docker, make sure Docker is running. You can verify by running:
+  
+       docker --version
+       docker-compose --version
+
+# Steps to Run the Project
+
+**1. Clone the Repository**
+
+Start by cloning the project repository from GitHub:
+
+      git clone https://github.com/noateomi/Yoga.git
+      cd Yoga
+
+**2. Build and Run the Docker Containers**
+
+Run the following command to build and start the containers:
+
+      docker-compose up -d --build
+
+This will:
+
+- Build the Docker image based on the Dockerfile.
+- Start the web and nginx services defined in docker-compose.yml.
+
+**3. Load Initial Data for Yoga Poses**
+
+To load sample data (including images) into your database, run the following command:
+
+      docker-compose exec web python Yoga/manage.py loaddata /app/Yoga/yoga_poses_fixture.json 
+
+This command loads initial data for the YogaPose model to ensure the app displays sample yoga poses.
+
+**4. Access the Application**
+
+Once everything is set up, access the application by opening a browser and going to:
+
+     http://localhost:8080
+
+- The application will be accessible on port 8080, with Nginx as the reverse proxy.
+- The web service serves the Django application, and nginx serves static files.
+
+**5. Stopping the Application**
+
+To stop the running containers, use:
+
+      docker-compose down
+    
