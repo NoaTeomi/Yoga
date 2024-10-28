@@ -9,8 +9,8 @@ services:
              python Yoga/manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
-    expose:
-      - "8000"  # Expose port 8000 internally within the Docker network
+    ports:
+      - "8000:8000"  # Map internal port 8000 to host port 8000
     env_file:
       - .env
     networks:
@@ -32,6 +32,7 @@ services:
 networks:
   app-network:
 
+
 # services:
 #   web:
 #     build:
@@ -43,8 +44,8 @@ networks:
 #              python Yoga/manage.py runserver 0.0.0.0:8000"
 #     volumes:
 #       - .:/app
-#     ports:
-#       - "8000:8000"
+#     expose:
+#       - "8000"  # Expose port 8000 internally within the Docker network
 #     env_file:
 #       - .env
 #     networks:
@@ -53,7 +54,7 @@ networks:
 #   nginx:
 #     image: nginx:latest
 #     ports:
-#       - "8080:80"
+#       - "8080:80"  # Map host port 8080 to Nginx port 80
 #     volumes:
 #       - ./media:/app/media  # Serve media files
 #       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
