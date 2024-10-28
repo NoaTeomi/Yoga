@@ -9,7 +9,7 @@ services:
              python Yoga/manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
-      - ./db.sqlite3:/app/db.sqlite3
+      # - ./db.sqlite3:/app/db.sqlite3
     ports:
       - "8000:8000"  # Map internal port 8000 to host port 8000
     env_file:
