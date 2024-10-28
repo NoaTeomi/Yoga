@@ -9,6 +9,7 @@ services:
              python Yoga/manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
+      - ./db.sqlite3:/app/db.sqlite3
     ports:
       - "8000:8000"  # Map internal port 8000 to host port 8000
     env_file:
@@ -31,38 +32,3 @@ services:
 
 networks:
   app-network:
-
-
-# services:
-#   web:
-#     build:
-#       context: .
-#     image: noateomi/yoga_web:1.0.0
-#     command: >
-#       sh -c "python Yoga/manage.py migrate &&
-#              python Yoga/manage.py collectstatic --noinput &&
-#              python Yoga/manage.py runserver 0.0.0.0:8000"
-#     volumes:
-#       - .:/app
-#     expose:
-#       - "8000"  # Expose port 8000 internally within the Docker network
-#     env_file:
-#       - .env
-#     networks:
-#       - app-network
-
-#   nginx:
-#     image: nginx:latest
-#     ports:
-#       - "8080:80"  # Map host port 8080 to Nginx port 80
-#     volumes:
-#       - ./media:/app/media  # Serve media files
-#       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-#       - ./staticfiles:/app/static  # Serve static files
-#     depends_on:
-#       - web
-#     networks:
-#       - app-network
-
-# networks:
-#   app-network:
